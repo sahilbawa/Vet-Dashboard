@@ -1,0 +1,328 @@
+﻿body {
+    padding-bottom: 20px;
+    font-family: 'Dosis';
+    font-size: 20px;
+}
+
+a:hover {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/*
+
+    ----- N A V -----
+
+*/
+
+.nav {
+    padding-top: 10px;
+    padding-bottom: 20px;
+    text-align: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #EEE;
+}
+
+    .nav.dark {
+        background-color: #333;
+        color: white;
+    }
+
+    .nav.pets {
+        background-image: url(../Images/pets.jpg);
+        /*Background vector created by isidoro151 (freepik.com)*/
+        background-size: 25%;
+        background-position: bottom;
+        background-repeat: repeat-x;
+    }
+
+    .nav.bones {
+        background-image: url(../Images/bones-prints.jpg);
+        background-repeat: repeat;
+        color: white;
+    }
+
+#theme-picker {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 15px;
+}
+
+.theme-btn {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 30px;
+    border: 1px solid #CCC;
+    cursor: pointer;
+}
+
+    .theme-btn.dark {
+        background-color: #333;
+    }
+
+    .theme-btn.bones {
+        background-color: #415361;
+    }
+
+.logo-text {
+    font-family: 'Indie Flower', sans-serif;
+}
+
+h1 {
+    font-family: 'Dosis', serif;
+    font-size: 50px;
+}
+
+
+
+
+/*
+
+    ----- GRID -----
+
+*/
+
+
+.flex-container {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+    .flex-container.single-item-row {
+        justify-content: center;
+    }
+
+.flex-item {
+    border-radius: 5px;
+    display: inline-block;
+    width: 50%;
+    border-bottom: 1px solid #EEE;
+    margin-bottom: -1px;
+    -webkit-transition: opacity 0.5s ease;
+    -moz-transition: opacity 0.5s ease;
+    -o-transition: opacity 0.5s ease;
+    transition: opacity 0.5s ease;
+}
+
+.flex-item.faded {
+    opacity: 0.4;
+}
+
+    .flex-item:hover, .flex-item.active {
+        background-color: aliceblue;
+    }
+
+        .flex-item:hover .appt-time, .flex-item.active .appt-time {
+            background-color: #d2e6f7;
+        }
+
+.flex-container.single-item-row .flex-item {
+    width: 80%;
+}
+
+.inner-flex-container {
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+    justify-content: center;
+}
+    .inner-flex-container .inner-flex-item {
+        padding: 0 15px;
+    }
+
+.left-col {
+    width: 210px;
+    text-align: right;
+}
+
+.center-col {
+    width: 40%;
+}
+
+.right-col {
+    width: 250px;
+    text-align: left;
+}
+
+.info-coll {
+    display: none;
+}
+
+.info {
+    display: block;
+    white-space: nowrap;
+}
+
+.appt-block {
+    margin: 10px 3px;
+    padding: 3px;
+}
+
+.appt-type-coll {
+    margin-right: 10px;
+}
+
+.appt-type {
+    background-color: #EEE;
+    border-radius: 3px;
+    padding: 3px;
+    margin-right: 5px;
+    font-size: 1.3em;
+}
+
+.appt-time {
+    font-size: 1.2em;
+    background-color: aliceblue;
+}
+
+    .appt-time:hover {
+        font-size: 1.2em;
+        background-color: #d2e6f7;
+    }
+
+
+
+
+/*
+
+    ----- PROMPTS -----
+
+*/
+
+.mobile-only .prompt-btn {
+    padding: 15px;
+    font-size: 1.8em;
+}
+.prompt-btn {
+    display: inline-block;
+    cursor: pointer;
+}
+
+.prompt-btn:hover {
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.prompt-accept {
+    color: green;
+}
+
+.prompt-accept:hover {
+    color: darkgreen;
+}
+
+.appt-time-info {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+    .appt-time-info.accepted {
+        color: darkgreen;
+    }
+
+    .appt-time-info.pending {
+        color: coral;
+    }
+
+    .appt-time-info i {
+        font-size: 1.5em;
+        margin-right: 15px;
+    }
+
+.user-text {
+    margin-right: 5px;
+}
+
+.tooltip-inner {
+    font-size: 1.2em;
+}
+
+
+
+
+/*
+
+    ----- DATEPICKER -----
+
+*/
+
+#dtpicker-modal {
+    background-color: white;
+    border: 1px solid #EEE;
+    padding: 5px;
+    border-radius: 5px;
+    box-shadow: 0px 3px 7px rgba(0,0,0,0.1);
+}
+
+.btn-grid {
+    margin-top: 15px;
+    text-align: center;
+    /* visually center buttons */
+    padding-right: 30px;
+}
+
+    .btn-grid .btn {
+        font-size: 1em;
+    }
+
+    .btn-grid .btn-cancel {
+        color: #AAA;
+    }
+
+
+
+
+footer {
+    text-align: center;
+    margin-top: 100px;
+}
+
+
+
+
+
+
+/*
+
+    ----- RESPONSIVE DISPLAY -----
+
+*/
+
+@media(max-width: 991px) {
+    .center-col {
+        width: 90%;
+    }
+
+    .right-col {
+        display: none;
+    }
+
+    .info-coll {
+        display: block;
+    }
+
+        .info-coll .info {
+            display: inline-block;
+        }
+}
+
+@media(max-width: 767px) {
+    .flex-container.single-item-row .flex-item {
+        width: 100%;
+    }
+    .left-col {
+        width: 200px;
+    }
+}

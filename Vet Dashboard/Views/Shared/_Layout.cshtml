@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title | sahilbawa</title>
+    <link href="https://fonts.googleapis.com/css?family=Bitter|Dosis|Indie+Flower|Titillium+Web|Yanone+Kaffeesatz&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/93a104d0c6.js" crossorigin="anonymous"></script>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @RenderSection("styles", required: false)
+</head>
+<body>
+    <div class="nav bones">
+        <h3 class="logo-text">Vet Dashboard</h3>
+        <h1 class="section-header">Appointments</h1>
+        <div id="theme-picker">
+            <span class="theme-btn dark"></span>
+            <span class="theme-btn bones"></span>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+    </div>
+    <footer>
+        <p>&copy; @DateTime.Now.Year - Sahil Bawa</p>
+    </footer>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+
+    <script type="text/javascript">
+
+        $(function () {
+            // activate tooltips
+            $('[data-toggle="tooltip"]').tooltip();
+            $('#datetimepicker').datetimepicker({
+                inline: true,
+                sideBySide: true
+            });
+        });
+
+        $('.theme-btn.dark').click(() => {
+            $('.nav').removeClass('bones');
+            $('.nav').addClass('dark');
+        });
+        $('.theme-btn.bones').click(() => {
+            $('.nav').removeClass('dark');
+            $('.nav').addClass('bones');
+        });
+    </script>
+    @RenderSection("scripts2", required: false)
+</body>
+
+<!--Sahil Bawa-->
+</html>

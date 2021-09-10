@@ -1,0 +1,242 @@
+﻿@using Vet_Dashboard.ViewModels
+@model List<AppointmentViewModel>
+@{
+    ViewBag.Title = "Vet Dashboard | Appointments";
+}
+@section styles {
+    @Styles.Render("~/Content/css/datetimepicker")
+}
+@section scripts {
+    @Scripts.Render("~/bundles/bootstrap/datetimepicker")
+    @Scripts.Render("~/bundles/popper")
+}
+
+<div class="flex-container single-item-row">
+    @foreach (AppointmentViewModel appt in Model)
+    {
+        string dateTimeFormat = "MMM d yyyy h:mm tt";
+        string apptIdTag = $"appt_{appt.Id}";
+        string breedText = appt.Animal.Breed != null ? $"({appt.Animal.Breed})" : "";
+        DateTime apptTime = appt.RequestedTime.LocalDateTime;
+
+        <div class="flex-item" id="@apptIdTag" data-user-id="@appt.Id">
+            <div class="appt-block">
+                <div class="inner-flex-container">
+                    <div class="left-col inner-flex-item">
+                        <div class="appt-time-prompt">
+                            <div class="hidden-xs">
+                                <a class="prompt-btn prompt-accept accept-trigger">ACCEPT</a>
+                                <a class="prompt-btn prompt-deny datepicker-trigger">PROPOSE NEW TIME</a>
+                            </div>
+                            <div class="mobile-only visible-xs">
+                                <a class="prompt-btn prompt-accept accept-trigger"><i class="fas fa-check"></i></a>
+                                <a class="prompt-btn prompt-deny datepicker-trigger"><i class="fas fa-exclamation"></i></a>
+                            </div>
+                        </div>
+                        <div class="appt-time-info pending" style="display: none;">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <span class="info-text hidden-xs">PENDING CLIENT CONFIRMATION</span>
+                        </div>
+                        <div class="appt-time-info accepted" style="display: none;">
+                            <i class="fas fa-check-circle"></i>
+                            <span class="info-text hidden-xs">ACCEPTED!</span>
+                        </div>
+                    </div>
+                    <div class="center-col inner-flex-item">
+                        <a class="appt-time datepicker-trigger">@apptTime.ToString(dateTimeFormat)</a>
+                        <input class="appt-time-val hidden" value="@apptTime.ToString(dateTimeFormat)" />
+                        <div class="appt-type-coll">
+                            @foreach (string type in appt.Types)
+                            {
+                                <span class="appt-type">@type</span>
+                            }
+                        </div>
+                        <div class="info-coll">
+                            <span class="user-info info">
+                                <i class="fas fa-user"></i> @appt.User.FullName
+                            </span>
+                            <span class="animal-info info">
+                                <i class="fas @appt.Animal.SpeciesIconClass" tooltip="@appt.Animal.Species"></i> @appt.Animal.Name @breedText
+                            </span>
+                        </div>
+                    </div>
+                    <div class="right-col inner-flex-item">
+                        <span class="user-info info">
+                            <i class="fas fa-user"></i> @appt.User.FullName
+                        </span>
+                        <span class="animal-info info">
+                            <i class="fas @appt.Animal.SpeciesIconClass" data-toggle="tooltip" title="@appt.Animal.Species"></i> @appt.Animal.Name @breedText
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div id="dtpicker-modal" style="overflow:hidden; display: none;">
+    <div id="datetimepicker"></div>
+    <div class="btn-grid">
+        <a class="btn btn-cancel">CANCEL</a>
+        <a class="btn btn-success">SUBMIT</a>
+    </div>
+</div>
+
+@section scripts2 {
+    <script type="text/javascript">
+        const status = {
+            ACCEPTED: 1,
+            PENDING: 2
+        }
+        // format for moment.js
+        // ex: Jan 1 2018 6: 30 AM
+        const datetimeFormat = 'MMM D YYYY h:mm A';
+        // animation length (in ms)
+        const animLen = 150;
+        let $datepicker = $('#dtpicker-modal');
+        let $popper = null;
+
+        // datepicker.close([Function callbackFn])
+        // callbackFn: function to be called after datepicker is closed
+        $datepicker["close"] = (callbackFn) => {
+            if ($datepicker.is(':visible')) {
+                // revert Appointment Datetime Values if changes were not submitted
+                const $newDate = $('.flex-item.active .appt-time');
+                const $oldDate = $('.flex-item.active .appt-time-val');
+                if (!moment($newDate.text()).isSame(moment($oldDate.val()))) {
+                    $newDate.text(moment($oldDate.val()).format(datetimeFormat));
+                }
+
+                $('.flex-item').removeClass('active');
+                $datepicker.fadeOut(animLen, callbackFn);
+            }
+            else if (callbackFn) {
+                callbackFn();
+            }
+        }
+
+        // datepicker.open([Moment $dt, $JQueryElement $row])
+        // $dt: datetime for initial datepicker date
+        // $row current row that is calling datepicker
+        $datepicker["open"] = ($dt, $row) => {
+            $row.addClass('active');
+            setDatepickerDateTime($dt);
+            updateDPPosition($row[0]);
+            $datepicker.fadeIn(animLen);
+        }
+
+        // datepick triggers open datepicker
+        $('.datepicker-trigger').click(function () {
+            const $row = $(this).parents('.flex-item').first();
+            if (!$row.hasClass('active')) {
+                const dt = $row.find('.appt-time-val')[0].value;
+                $datepicker.close(() => {
+                    $datepicker.open(dt, $row);
+                });
+            }
+        })
+
+        // close datepicker if clicked outside of datepicker or selected row
+        $(document).mousedown(function (e) {
+            if ($datepicker.is(':visible')) {
+                const $row = $('.flex-item.active');
+                // if the target of the click isn't the datepicker or selected row
+                if (!$datepicker.is(e.target) && $datepicker.has(e.target).length === 0) {
+                    if ($row === null || !$row.is(e.target) && $row.has(e.target).length === 0) {
+                        $datepicker.close();
+                    }
+                }
+            }
+        });
+
+        // datepicker button commands
+        $('#dtpicker-modal .btn-cancel').click(() => $datepicker.close());
+        $('#dtpicker-modal .btn-success').click(submitDate);
+
+        // set datepicker's date to designated date (Moment/string dt)
+        function setDatepickerDateTime(dt) {
+            $('#datetimepicker').data("DateTimePicker").date(moment(dt));
+        }
+
+        // update position of datepicker using reference object (ref)
+        function updateDPPosition($ref) {
+            if ($popper === null) {
+                $popper = new Popper($ref, $datepicker, {
+                    placement: 'bottom'
+                });
+            }
+            else {
+                $popper.reference = $ref;
+                $popper.scheduleUpdate();
+            }
+        }
+
+        // update displayed date in dashboard to reflect datepicker
+        function updateDate() {
+            const $date = $('.flex-item.active .appt-time');
+            if ($date.length !== 0) {
+                const newDate = $('#datetimepicker').data("DateTimePicker").date().format(datetimeFormat);
+                $date.text(newDate);
+            }
+        }
+
+        // submit final date from datepicker, updating source value
+        function submitDate() {
+            const $newDate = $('#datetimepicker').data("DateTimePicker").date();
+            const $row = $('.flex-item.active');
+            $row.find('.appt-time-val').val($newDate.format(datetimeFormat));
+            $row.find('.appt-time').addClass('pending');
+            updatePrompts(status.PENDING, $row);
+            $datepicker.close();
+
+            $row.attr('data-user-id')
+            sendNewApptProposal($row.attr('data-user-id'), $newDate.format());
+        }
+
+        // send new appointment date to client
+        function sendNewApptProposal(userId, newDate) {
+            $.ajax({  
+                type: "POST",  
+                url: "@Url.Action("SendNewApptProposal", "Home")",  
+                contentType: "application/json; charset=utf-8",  
+                data: `\{"userId": "${userId}", "newDateTime": "${newDate}"}`,  
+                dataType: "html",  
+                success: function (result, status, xhr) {  
+                    // email sent
+                },  
+                error: function (xhr, status, error) {  
+                    // show notification: "Error occurred: email could not be sent."
+                }  
+            });
+        }
+
+        $('#datetimepicker').on('dp.change', updateDate);
+
+        // function for replacing ACCEPT and PROPOSE prompts with status info
+        function updatePrompts(currStatus, $row) {
+            let $info;
+            let $prompt = $row.find('.appt-time-prompt');
+
+            if (currStatus === status.ACCEPTED) {
+                $info = $prompt.parent().find('.appt-time-info.accepted');
+            }
+            else if (currStatus === status.PENDING) {
+                $info = $prompt.parent().find('.appt-time-info.pending');
+            }
+
+            if ($info) {
+                $prompt.fadeOut(animLen, () => {
+                    $info.fadeIn(animLen, () => {
+                        setTimeout(() => $row.addClass('faded'), 750);
+                    });
+                });
+            }
+        }
+
+        // function for ACCEPT prompt
+        $('.accept-trigger').click(function () {
+            const $row = $(this).parents('.flex-item');
+            updatePrompts(status.ACCEPTED, $row);
+        });
+    </script>
+}
