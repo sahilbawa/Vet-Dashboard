@@ -1,5 +1,5 @@
 <h1>Vet Dashboard</h1>
-<a href="http://code.sahilbawa.com">View live example here!</a>
+<a href="http://code.sahilbawa.com" target="_blank">View live example here!</a>
 
 <p>This is a ASP.NET MVC template for an appointment dashboard interface which is already set up for integration with an API.</p>
 <h3>Available Actions:</h3>
