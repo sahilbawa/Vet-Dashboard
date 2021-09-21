@@ -12,7 +12,7 @@ namespace Vet_Dashboard.Models
 {
     public class DashboardDAL
     {
-        private static string _apiAppointmentsUrl = "https://api.sahilbawa.com/vetdashboard";
+        private static string _apiAppointmentsUrl = "https://api.sahilbawa.com/appointments/default";
         private readonly HttpClient _client;
 
         public DashboardDAL()
